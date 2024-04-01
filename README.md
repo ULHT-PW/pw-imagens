@@ -2,12 +2,12 @@
 
 Para adicionar um campo de imagem/ficheiro a uma classe, e manusear inserir imagens e ficheiros na base de dados através de formulários, deverá fazer os seguintes passos extra:
 
-1. Criar, na root, a pasta `media/tarefas` para guardar os ficheiros carregados. Na pasta media deve colocar uma pasta com o nome da aplicação (no exemplo em baixo, aplicação tarefa).
+1. Criar, na root, a pasta `media/app` (em vez de `app` use o nome da aplicaçao que está a usar, ou um nome à sua escolha) para guardar os ficheiros carregados. Na pasta media deve colocar uma pasta com o nome da aplicação (no exemplo em baixo, aplicação app).
 
 ```bash
-> config
-> media/tarefas
-> tarefas
+> project
+> media/app
+> app
 db.sqlite3
 manage.py
 ```
@@ -30,17 +30,17 @@ urlpatterns += static(
       document_root=settings.MEDIA_ROOT)
 ```
 
-4. Em `models.py`, na classe adicionar um atributo com o campo imagem/ficheiro. Deverá especificar para onde devem ser carregados os ficheiros. O django como base a pasta media, neste caso ao especificar `upload_to='tarefas/'`, os ficheiros sendo carregados na pasta `media/tarefas/`.
+4. Em `models.py`, na classe adicionar um atributo com o campo imagem/ficheiro. Deverá especificar para onde devem ser carregados os ficheiros. O django como base a pasta media, neste caso ao especificar `upload_to='app/fotos'`, os ficheiros sendo carregados na pasta `media/app/fotos/`.
 
 ```Python
-imagem = models.ImageField(upload_to='tarefas/', null=True, blank=True)
-ficheiro = models.FileField(upload_to='tarefas/', null=True, blank=True)
+imagem = models.ImageField(upload_to='app/fotos', null=True, blank=True)
+ficheiro = models.FileField(upload_to='app/ficheiros', null=True, blank=True)
 ```
 
 5. No ficheiro `views.py`, onde cria uma instância do formulário, adicionar `request.FILES`:
 
 ```Python
-form = TarefaForm(request.POST or None, request.FILES)
+form = AppForm(request.POST or None, request.FILES)
 ```
 
 
@@ -52,11 +52,11 @@ form = TarefaForm(request.POST or None, request.FILES)
 7. Para inserir no HTML uma imagem associada a um objeto, utilize o campo `url` de `imagem`:
 
 ```HTML
-<img src="{{ tarefa.imagem.url }}">
+<img src="{{ app.imagem.url }}">
 ```
 
 8. Para inserir o link para um ficheiro associado a um objeto, utilize os campos `url` e `name` de `ficheiro`:
 
 ```HTML
-Ficheiro: <a href="{{ tarefa.ficheiro.url }}">{{ tarefa.ficheiro.name }}</a>
+Ficheiro: <a href="{{ app.ficheiro.url }}">{{ app.ficheiro.name }}</a>
 ```
